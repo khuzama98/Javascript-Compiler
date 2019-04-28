@@ -1,0 +1,437 @@
+"use strict";
+
+let input;
+// document.getElementById('input').value = '@@'
+
+let lineCount = 1;
+let num = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+let punctuatorToCheck = ['=', ';', '(', ')', '{', '}', '[', ']', ',', '<', '>', '"', "'", ':', '^', '*', '%', '+', '-', '&', '|', '~']
+let printFlag = false;
+
+let text;
+const openFile = function (event) {
+    const input = event.target;
+    document.getElementById('input').setAttribute('disabled', 'true')
+    const reader = new FileReader();
+    reader.onload = function () {
+        text = reader.result;
+        console.log(reader.result);
+    };
+    reader.readAsText(input.files[0]);
+};
+
+
+
+
+const takeInput = () => {
+    let paraToBreak;
+    const checkInput = document.getElementById('input').hasAttribute('disabled')
+    if (!checkInput) {
+        input = document.getElementById('input').value;
+        paraToBreak = input;
+    }
+    else {
+        paraToBreak = text
+    }
+
+    let word;
+    for (let i = 0; i <= paraToBreak.length; i++) {
+        let char = paraToBreak.slice(i, i + 1);
+        // debugger;
+        // if(i===0){
+        //     word=char;
+        // }
+        if (char === ' ') {
+            if (paraToBreak.slice(i - 1, i) === "\n") {
+
+            }
+            else if (paraToBreak.slice(i - 1, i) === " ") {
+
+            }
+            else if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+            }
+            else if (word !== '') {
+                gotAWord(word)
+            }
+            word = '';
+        }
+        else if (char === '=') {
+            if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+                word = '';
+            }
+            if (paraToBreak.slice(i, i + 3) === "===") {
+                gotAWord('===')
+                i = i + 2;
+            }
+            else if (paraToBreak.slice(i, i + 2) === "==") {
+                gotAWord('==')
+                i = i + 1;
+            }
+            else {
+                gotAWord(char)
+            }
+        }
+        else if (char === '!') {
+            if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+                word = '';
+            }
+            if (paraToBreak.slice(i, i + 3) === "!==") {
+                gotAWord('!==')
+                i = i + 2;
+            }
+            else if (paraToBreak.slice(i, i + 2) === "!=") {
+                gotAWord('!=')
+                i = i + 1;
+            }
+            else {
+                gotAWord(char)
+            }
+        }
+        else if (char === '&') {
+            if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+                word = '';
+            }
+            if (paraToBreak.slice(i, i + 2) === "&&") {
+                gotAWord('&&')
+                i = i + 1;
+            }
+            else {
+                gotAWord(char)
+            }
+        }
+        else if (char === '|') {
+            if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+                word = '';
+            }
+            if (paraToBreak.slice(i, i + 2) === "||") {
+                gotAWord('||')
+                i = i + 1;
+            }
+            else {
+                gotAWord(char)
+            }
+        }
+        else if (char === '(') {
+            if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+            }
+            gotAWord(char);
+            word = '';
+        }
+        else if (char === ')') {
+            if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+            }
+            gotAWord(char);
+            word = '';
+        }
+        else if (char === '~') {
+            if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+            }
+            gotAWord(char);
+            word = '';
+        }
+        else if (char === '\n') {
+            // debugger
+            // console.log(paraToBreak.slice(i-1,i))
+            if (paraToBreak.slice(i - 1, i) === "");
+            else if (word!==undefined && word.length > 0 && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word)
+            }
+            word = '';
+            lineCount++;
+        }
+        else if (char === '{') {
+            if (paraToBreak.slice(i - 1, i) === "\n") {
+
+            }
+            else if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+            }
+            gotAWord(char);
+            word = '';
+        }
+        else if (char === '}') {
+            if (paraToBreak.slice(i - 1, i) === "\n") {
+
+            }
+            else if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+            }
+            gotAWord(char);
+            word = '';
+        }
+        else if (char === '>') {
+            if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+                word = '';
+            }
+            if (paraToBreak.slice(i, i + 2) === ">=") {
+                gotAWord('>=')
+                i = i + 1;
+            }
+            else {
+                gotAWord(char);
+            }
+        }
+        else if (char === '<') {
+            if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+                word = '';
+            }
+            if (paraToBreak.slice(i, i + 2) === "<=") {
+                gotAWord('<=')
+                i = i + 1;
+            }
+            else {
+                gotAWord(char)
+            }
+        }
+        else if (char === '%') {
+            if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+                word = '';
+            }
+            if (paraToBreak.slice(i, i + 2) === "%=") {
+                gotAWord('%=')
+                i = i + 1;
+            }
+            else {
+                gotAWord(char)
+            }
+        }
+        else if (char === '+') {
+            // debugger
+            if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+                word = '';
+            }
+            if (paraToBreak.slice(i, i + 2) === "+=") {
+                gotAWord('+=');
+                i = i + 1;
+            }
+            else if (paraToBreak.slice(i, i + 2) === "++") {
+                gotAWord('++');
+                i = i + 1;
+            }
+            else if ((paraToBreak.slice(i - 1, i) === " " && num.indexOf(paraToBreak.slice(i - 2, i - 1)) === -1) || (num.indexOf(paraToBreak.slice(i - 1, i)) === -1)) {
+                if (i === 0 || word === undefined) {
+                    word = char;
+                }
+                else {
+                    word += char;
+                }
+            }
+            else {
+                gotAWord(char);
+            }
+        }
+        else if (char === '-') {
+            // debugger;
+            if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+                word = '';
+            }
+            if (paraToBreak.slice(i, i + 2) === "--") {
+                gotAWord('--');
+                i = i + 1;
+            }
+            else if (paraToBreak.slice(i, i + 2) === "-=") {
+                gotAWord('-=');
+                i = i + 1;
+            }
+            else if ((paraToBreak.slice(i - 1, i) === " " && num.indexOf(paraToBreak.slice(i - 2, i - 1)) === -1) || (num.indexOf(paraToBreak.slice(i - 1, i)) === -1)) {
+                if (i === 0 || word === undefined) {
+                    word = char;
+                }
+                else {
+                    word += char;
+                }
+            }
+            else {
+                gotAWord(char);
+            }
+        }
+        else if (char === ';') {
+            if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+            }
+            gotAWord(char);
+            word = '';
+        }
+        else if (char === '^') {
+            if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+                word = '';
+            }
+            if (paraToBreak.slice(i, i + 2) === "^=") {
+                gotAWord('^=');
+                i = i + 1;
+            }
+            else {
+                gotAWord(char);
+            }
+        }
+        else if (char === '*') {
+            if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+                word = '';
+            }
+            if (paraToBreak.slice(i, i + 2) === "*=") {
+                gotAWord('*=');
+                i = i + 1;
+            }
+            else {
+                gotAWord(char);
+            }
+        }
+        else if (char === ',') {
+            if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+            }
+            gotAWord(char);
+            word = '';
+        }
+        else if (char === ':') {
+            if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+            }
+            gotAWord(char);
+            word = '';
+        }
+        else if (char === '/') {
+
+            if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+                word = '';
+            }
+            if (paraToBreak.slice(i + 1, i + 2) === "/") {
+
+                if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                    gotAWord(word);
+                    word = '';
+                }
+                for (; i <= paraToBreak.length; i++) {
+                    let checkChar = paraToBreak.slice(i, i + 1)
+                    if (checkChar === '\n') {
+                        lineCount++;
+                        break;
+                    }
+                }
+            }
+            else if (paraToBreak.slice(i, i + 2) === "/=") {
+                gotAWord('/=');
+                i = i + 1;
+            }
+            else {
+                gotAWord(char);
+            }
+        }
+        else if (char === '.') {
+            // console.log(paraToBreak.slice(i-1,i))
+            // console.log(paraToBreak.slice(i+1,i+2))
+            // debugger;
+            if (word !== '' && word.indexOf(char) > -1) {
+                gotAWord(word);
+                word = '';
+                if (num.indexOf(paraToBreak.slice(i + 1, i + 2)) === -1 && punctuatorToCheck.indexOf(paraToBreak.slice(i + 1, i + 2)) === -1)
+                    gotAWord(char)
+                else {
+                    word += char;
+
+                }
+            }
+            else if (num.indexOf(paraToBreak.slice(i - 1, i)) > -1 && num.indexOf(paraToBreak.slice(i + 1, i + 2)) > -1) {
+                word += char;
+            }
+            else if (num.indexOf(paraToBreak.slice(i - 1, i)) === -1 && num.indexOf(paraToBreak.slice(i + 1, i + 2)) > -1) {
+                gotAWord(word);
+                word = '';
+                word += char;
+            }
+            else if (paraToBreak.slice(i - 1, i) !== " " && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1 && i > 0) {
+                gotAWord(word);
+                gotAWord(char);
+                word = '';
+            }
+            else {
+                gotAWord(char)
+                word = '';
+            }
+        }
+        else if (char === '"') {
+            // debugger;
+            let indexOfQuote;
+            let j;
+            let toincrement = false;
+            for (j = i + 1; j <= paraToBreak.length; j++) {
+                let findQuote = paraToBreak.slice(j, j + 1)
+                if (findQuote === '\\' && paraToBreak.slice(j + 1, j + 2) === '\\' && paraToBreak.slice(j + 2, j + 3) === '"') {
+                    indexOfQuote = j + 2;
+                    j = j + 2;
+                    break;
+                }
+                else if (findQuote === '"' && paraToBreak.slice(j - 1, j) !== '\\') {
+                    indexOfQuote = j;
+                    break;
+                }
+                else if (findQuote === '\n') {
+                    toincrement = true;
+                    indexOfQuote = j;
+                    break;
+                }
+            }
+            gotAWord(paraToBreak.slice(i, indexOfQuote + 1))
+            i = j;
+            if (toincrement)
+                lineCount++;
+        }
+        else if (char === "'") {
+            // debugger;
+            let indexOfQuote;
+            let j;
+            let toincrement = false;
+            for (j = i + 1; j <= paraToBreak.length; j++) {
+                let findQuote = paraToBreak.slice(j, j + 1)
+                if (findQuote === '\\' && paraToBreak.slice(j + 1, j + 2) === '\\' && paraToBreak.slice(j + 2, j + 3) === "'") {
+                    indexOfQuote = j + 2;
+                    j = j + 2;
+                    break;
+                }
+                else if (findQuote === "'" && paraToBreak.slice(j - 1, j) !== '\\') {
+                    indexOfQuote = j;
+                    break;
+                }
+                else if (findQuote === '\n') {
+                    toincrement = true;
+                    indexOfQuote = j;
+                    break;
+                }
+            }
+            gotAWord(paraToBreak.slice(i, indexOfQuote + 1))
+            i = j;
+            if (toincrement)
+                lineCount++;
+        }
+        else if (i === paraToBreak.length && punctuatorToCheck.indexOf(paraToBreak.slice(i - 1, i)) === -1) {
+            gotAWord(word);
+            word = '';
+            // console.log(tokenArray)
+            printFlag = true;
+        }
+        else {
+            if (i === 0 || word === undefined) {
+                word = char;
+            }
+            else {
+                word += char;
+            }
+        }
+    }
+}
